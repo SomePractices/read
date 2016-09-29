@@ -20,6 +20,8 @@
             background: #e9dfc7;
         }
 
+        /*小说正文部分*/
+
         .m-read-content {
             font-size: 14px;
             color: #555;
@@ -42,6 +44,8 @@
             line-height: 24px;
 
         }
+
+        /*上一章，下一章打按钮*/
 
         .u-tab {
             height: 34px;
@@ -73,11 +77,13 @@
             margin: 0 auto;
         }
 
+        /*顶部 导航*/
         .top-nav {
             position: fixed;
             top: 0;
             height: 50px;
             width: 100%;
+            opacity: 0.9;
             z-index: 9999;
             background: #000;
         }
@@ -101,11 +107,16 @@
             color: #d5d5d6;
         }
 
+        /*底部导航*/
         .bottom-nav {
+            position: fixed;
+            bottom: 0;
             width: 100%;
-            height: 80px;
+            height: 70px;
             background: #000;
-            padding-left:20px;
+            opacity: 0.9;
+            z-index: 9999;
+            padding-left: 20px;
         }
 
         .icon-catalog {
@@ -147,13 +158,102 @@
         .nav-block ul {
             width: 100%;
             height: 50px;
-            margin-top: 20px;
+            margin-top: 15px;
         }
 
         .bottom-text {
             text-align: center;
             margin-top: 8px;
             color: #d5d5d6;;
+        }
+
+        /*底部控制样式部分*/
+        .nav-pannel-bk {
+            position: fixed;
+            bottom: 70px;
+            height: 135px;
+            width: 100%;
+            background: #000;
+            opacity: 0.9;
+            z-index: 10000;
+        }
+
+        .nav-pannel {
+            position: fixed;
+            bottom: 70px;
+            height: 135px;
+            width: 100%;
+            background: none;
+            color: #fff;
+            z-index: 10001;
+        }
+
+        .child-mod {
+            padding: 5px 10px;
+            margin: 15px;
+
+        }
+
+        .child-mod span {
+            display: inline-block;
+            padding-right: 20px;
+            padding-left: 10px;
+        }
+
+        .font-size-button {
+            background: none;
+            border: 1px #8c8c8c solid;
+            color: #fff;
+            border-radius: 16px;
+            padding: 5px 40px;
+        }
+
+        .child-mod:nth-child(2) {
+            margin-right: 10px;
+        }
+
+        .bk-container {
+            position: relative;
+            width: 30px;
+            height: 30px;
+            background: #fff;
+            border-radius: 50%;
+            display: inline-block;
+            vertical-align: -13px;
+            margin-right:8px;
+
+        }
+
+        .bk-container-current {
+            position: absolute;
+            top:-2px;
+            left:-2px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 1px #ff7800 solid;
+            display: inline-block;
+            z-index: 10000;
+            margin-right:8px;
+        }
+        .bk-container-green{
+            position: relative;
+            width: 30px;
+            height: 30px;
+            background: rgb(199,237,204);
+            border-radius: 50%;
+            display: inline-block;
+            vertical-align: -13px;
+            margin-right:8px;
+        }
+        .bk-container-black{
+            position: relative;
+            width: 30px;
+            height: 30px;
+            background: #080c10;
+            border-radius: 50%;
+            display: inline-block;
+            vertical-align: -13px;
         }
 
     </style>
@@ -185,20 +285,28 @@
         </ul>
     </div>
 
-    <!--<div class="nav-pannel-bk"></div>-->
-    <!--<div class="nav-pannel" id="font-container">-->
-    <!--<div class="child-mod">-->
-    <!--<span>字号</span>-->
-    <!--<button id="large-font" class="font-size-button">大</button>-->
-    <!--<button id="small-font" class="font-size-button">小</button>-->
-    <!--</div>-->
-    <!--<div class="child-mod">-->
-    <!--<span>背景</span>-->
-    <!--<div class="bk-container">-->
-    <!--<div class="bk-container-current"></div>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</div>-->
+    <div class="nav-pannel-bk"></div>
+    <div class="nav-pannel" id="font-container">
+        <div class="child-mod">
+            <span>字号</span>
+            <button id="large-font" class="font-size-button">大</button>
+            <button id="small-font" class="font-size-button">小</button>
+        </div>
+        <div class="child-mod">
+            <span>背景</span>
+            <div class="bk-container">
+                <div class="bk-container-current"></div>
+            </div>
+            <div class="bk-container-green">
+                <div class="bk-container-current"></div>
+            </div>
+            <div class="bk-container-black">
+                <div class="bk-container-current"></div>
+            </div>
+
+        </div>
+    </div>
+
     <div class="bottom-nav-bk"></div><!--背景颜色-->
     <div class="bottom-nav">
         <div class="nav-block">

@@ -38,7 +38,7 @@
         .m-read-content p {
             text-indent: 2em; /*缩进*/
             margin: 0.5em 0;
-            letter-spacing: 0px;
+            letter-spacing: 0;
             line-height: 24px;
 
         }
@@ -93,11 +93,36 @@
             background-size: contain;
 
         }
-        .nav-title{
+
+        .nav-title {
             position: absolute;
-            top:16px;
-            left:42px;
-            color:#d5d5d6;
+            top: 16px;
+            left: 42px;
+            color: #d5d5d6;
+        }
+
+        .nav li {
+            display: inline-block;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            background: #000;
+            height: 80px;
+            width: 100%;
+            z-index: 9999;
+        }
+
+        .nav {
+            margin: auto;
+        }
+
+        .nav li {
+            width: 50px;
+            height: 50px;
+            font-size: 14px;
+            color: #d5d5d6;
         }
     </style>
 </head>
@@ -127,6 +152,48 @@
             <li id="next_button">下一章</li>
         </ul>
     </div>
+
+    <!--<div class="nav-pannel-bk"></div>-->
+    <!--<div class="nav-pannel" id="font-container">-->
+        <!--<div class="child-mod">-->
+            <!--<span>字号</span>-->
+            <!--<button id="large-font" class="font-size-button">大</button>-->
+            <!--<button id="small-font" class="font-size-button">小</button>-->
+        <!--</div>-->
+        <!--<div class="child-mod">-->
+            <!--<span>背景</span>-->
+            <!--<div class="bk-container">-->
+                <!--<div class="bk-container-current"></div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+    <div></div><!--背景颜色-->
+    <div>
+        <div>
+            <ul>
+                <li></li>
+                <li></li>
+            </ul>
+        </div><!--目录-->
+        <div>
+            <ul>
+                <li></li>
+                <li></li>
+            </ul>
+        </div><!--字体-->
+        <div>
+            <ul>
+                <li></li>
+                <li></li>
+            </ul>
+            <ul>
+                <li></li>
+                <li></li>
+            </ul>
+        </div><!--夜间，白天图标-->
+    </div>
+
+
 </div>
 <script src="lib/zepto.min.js"></script>
 <script>

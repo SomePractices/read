@@ -220,33 +220,35 @@
             border-radius: 50%;
             display: inline-block;
             vertical-align: -13px;
-            margin-right:8px;
+            margin-right: 8px;
 
         }
 
         .bk-container-current {
             position: absolute;
-            top:-2px;
-            left:-2px;
+            top: -2px;
+            left: -2px;
             width: 32px;
             height: 32px;
             border-radius: 50%;
             border: 1px #ff7800 solid;
             display: inline-block;
             z-index: 10000;
-            margin-right:8px;
+            margin-right: 8px;
         }
-        .bk-container-green{
+
+        .bk-container-green {
             position: relative;
             width: 30px;
             height: 30px;
-            background: rgb(199,237,204);
+            background: rgb(199, 237, 204);
             border-radius: 50%;
             display: inline-block;
             vertical-align: -13px;
-            margin-right:8px;
+            margin-right: 8px;
         }
-        .bk-container-black{
+
+        .bk-container-black {
             position: relative;
             width: 30px;
             height: 30px;
@@ -346,7 +348,36 @@
 <script src="js/jquery.jsonp.js"></script>
 
 <script>
+    (function () {
+        var Util = (function () {
+            var prefix = 'html5_rreader_';
+            var StorageGetter = function (key) {
+                return localStorage.getItem(prefic + key);
+            };
+            var StorageSetter = function (key,val) {
+                return localStorage.setItem(prefix + key,val);
+            };
+            return {
+                StorageGetter:StorageGetter,
+                StorageSetter:StorageSetter
+            }
+        })();
+        function main() {
+            //整个项目的入口函数
+        }
+        function ReaderModel() {
+            //实现和阅读器数据交互的方法
+        }
+        function ReaderBaseFrame() {
+            //渲染基本的UI结构
+        }
 
+        function EventHandler() {
+            //交互的事件绑定
+        }
+
+        main();
+    })();
 </script>
 </body>
 </html>

@@ -482,7 +482,7 @@
             var Util = (function () {
                 var prefix = 'html5_reader_';
                 var StorageGetter = function (key) {
-                    return localStorage.getItem(prefic + key);
+                    return localStorage.getItem(prefix + key);
                 };
                 var StorageSetter = function (key, val) {
                     return localStorage.setItem(prefix + key, val);
@@ -495,12 +495,18 @@
             var Dom = {
                 top_nav: $('#top-nav'),//array
                 bottom_nav: $('.foot-nav'),
-                font_button:$('.m-font-bar'),
+                font_button: $('.m-font-bar'),
                 font_container: $('.font-container')//字号
             };
             var Win = $(window);
             var Doc = $(document);
-
+            var RootContainer = $('#fiction_container');
+            var initFonSize = Util.StorageGetter('font-size');
+            initFonSize = parseInt(initFonSize);
+            if(!initFonSize){
+                initFonSize = 14;
+            }
+            RootContainer.css('font-size', initFonSize);
 
             function main() {
                 //整个项目的入口函数
@@ -532,15 +538,33 @@
 
                 Dom.font_button.click(function () {//点击字体 出现字体控制面板
 
-                   if(Dom.font_container.css('display')=='none'){
-                       Dom.font_container.show();
-                       $('.icon-font').addClass('font-current');
-                   }else{
-                       Dom.font_container.hide();
-                       $('.icon-font').removeClass('font-current');
+                    if (Dom.font_container.css('display') == 'none') {
+                        Dom.font_container.show();
+                        $('.icon-font').addClass('font-current');
+                    } else {
+                        Dom.font_container.hide();
+                        $('.icon-font').removeClass('font-current');
 
-                   }
+                    }
                 });
+                $('#large-font').click(function () {
+                    if (initFonSize > 20) {
+                        return;
+                    }
+                    initFonSize += 1;
+                    RootContainer.css('font-size', initFonSize);
+                    Util.StorageSetter('font-size', initFonSize);
+                });
+
+                $('#small-font').click(function () {
+                    if (initFonSize < 12) {
+                        return;
+                    }
+                    initFonSize -= 1;
+                    RootContainer.css('font-size', initFonSize);
+                    Util.StorageSetter('font-size', initFonSize);
+                });
+
                 $('.night-day').click(function () {
                     //todo 触发背景切换事件
                 });

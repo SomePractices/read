@@ -277,7 +277,7 @@
             margin-right: 8px;
         }
 
-        .green {
+        .bk-container-green {
             position: relative;
             width: 30px;
             height: 30px;
@@ -288,7 +288,7 @@
             margin-right: 8px;
         }
 
-        .black {
+        .bk-container-black {
             position: relative;
             width: 30px;
             height: 30px;
@@ -322,17 +322,7 @@
     </div>
     <div id="fiction_chapter_title"></div>
     <div id="fiction_container" class="m-read-content">
-        <h4>陈家少年</h4>
-        <p>清脆的鸡鸣声还未传遍青城山，陈氏家族的演武场中就隐约传来了一阵操练的响声。操场上，一位年约十五岁的少年正在练拳，虽是寒冬腊月，但他早已是满身的热汗，显然是练了不短的时间。</p>
-        <p>而这个时候，家族之中大部分的人都还在熟睡着。</p>
-        <p>他面色苍白，身材瘦弱，但目光却极为坚毅，闪烁着无穷的斗志。</p>
-        <p>保持这般修炼，他已经坚持了整整三年。</p>
-        他是享誉陈家旁系家族的天才，以十二岁幼龄便已经达到了武徒境三重的实力，当时更是整个青城山之中的佼佼者。在那时，家族、父母都对于陈寒赋予了厚望。因为他极有可能凭借着极高的天赋，加入陈家内门之中。
-        <p>清脆的鸡鸣声还未传遍青城山，陈氏家族的演武场中就隐约传来了一阵操练的响声。操场上，一位年约十五岁的少年正在练拳，虽是寒冬腊月，但他早已是满身的热汗，显然是练了不短的时间。</p>
-        <p>而这个时候，家族之中大部分的人都还在熟睡着。</p>
-        <p>他面色苍白，身材瘦弱，但目光却极为坚毅，闪烁着无穷的斗志。</p>
-        <p>保持这般修炼，他已经坚持了整整三年。</p>
-        他是享誉陈家旁系家族的天才，以十二岁幼龄便已经达到了武徒境三重的实力，当时更是整个青城山之中的佼佼者。在那时，家族、父母都对于陈寒赋予了厚望。因为他极有可能凭借着极高的天赋，加入陈家内门之中。
+        <!--内容-->
     </div>
     <div class="m-button-bar">
         <ul class="u-tab">
@@ -354,10 +344,10 @@
             <div class="bk-container">
                 <div class="bk-container-current"></div>
             </div>
-            <div class="bk-container green">
+            <div class="bk-container-green">
                 <div></div>
             </div>
-            <div class="bk-container black">
+            <div class="bk-container-black">
                 <div></div>
             </div>
 
@@ -419,7 +409,21 @@
                 var StorageSetter = function (key, val) {
                     return localStorage.setItem(prefix + key, val);
                 };
+
+                var getBSONP = function (url, callback) {
+                    return $.jsonp({
+                        url: url,
+                        cache: true,
+                        callback: 'duokan_fiction_chapter',
+                        success: function (result) {
+                            var data = $.base64.decode(result);
+                            var json = decodeURIComponent(escape(data));
+                            callback(json);
+                        }
+                    })
+                };
                 return {
+                    getBSONP: getBSONP,
                     StorageGetter: StorageGetter,
                     StorageSetter: StorageSetter
                 }
@@ -431,30 +435,104 @@
                 font_container: $('.font-container'),//字号
                 night_button: $('.night-day'),
                 day_button: $('.light-day'),
-                bk_container:$('.bk-container')
+                bk_container: $('.bk-container')
             };
             var Win = $(window);
             var Doc = $(document);
             var body = $('body');
+            var readerModer;
+            var readerUI;
             var RootContainer = $('#fiction_container');
-            var initFonSize = Util.StorageGetter('font-size');
+            var initFonSize = Util.StorageGetter('font-size');//字号
             initFonSize = parseInt(initFonSize);
             if (!initFonSize) {
                 initFonSize = 14;
             }
             RootContainer.css('font-size', initFonSize);
 
+
             function main() {
                 //整个项目的入口函数
+                readerModer = ReaderModel();
+                readerUI = ReaderBaseFrame(RootContainer);
+                readerModer.init(function (data) {
+                    readerUI(data);
+                });
                 EventHandler();
+
             }
 
             function ReaderModel() {
                 //实现和阅读器数据交互的方法
+                var ChapterTotal;
+                var Chapter_id;
+                var init = function (UIcallback) {
+                    getFictionInfo(function () {
+                        getCurChapterContent(Chapter_id, function (data) {
+                            UIcallback && UIcallback(data);
+                        });
+                    })
+                };
+                var getFictionInfo = function (callback) {
+                    $.get('data/chapter.json', function (data) {
+                        //获得章节信息的回调
+                        Chapter_id = data.chapters[1].chapter_id;
+                        ChapterTotal = data.chapters.length;
+                        callback && callback();
+                        // if(callback){callback()}的缩写，目的是代码健壮性的提升，防治不声明callback就运行导致的报错
+
+                    }, 'json');
+                };
+                var getCurChapterContent = function (chapter_id, callback) {
+                    $.get('data/data' + chapter_id + '.json', function (data) {
+                                if (data.result == 0) {
+                                    var url = data.jsonp;
+                                    Util.getBSONP(url, function (data) {
+                                        callback && callback(data);
+                                    })
+                                }
+                            }
+                            , 'json')
+                };
+
+                var prevChapter = function (UIcallback) {
+                    Chapter_id = parseInt(Chapter_id, 10);
+                    if (Chapter_id == 0) {
+                        return;
+                    }
+                    Chapter_id -= 1;
+                    getCurChapterContent(Chapter_id, UIcallback);
+                };
+                var nextChapter = function (UIcallback) {
+                    Chapter_id = parseInt(Chapter_id, 10);
+                    if (Chapter_id == ChapterTotal) {
+                        return;
+                    }
+                    Chapter_id += 1;
+                    getCurChapterContent(Chapter_id, UIcallback);
+                };
+                return {//将数据层的接口暴露以外的地方
+                    init: init,
+                    prevChapter: prevChapter,
+                    nextChapter: nextChapter
+                };
             }
 
-            function ReaderBaseFrame() {
+            function ReaderBaseFrame(container) {
                 //渲染基本的UI结构
+                function parseChapterData(jsonData) {
+                    var jsonObj = JSON.parse(jsonData);
+                    var html = '<h4>' + jsonObj.t + '</h4>';
+                    for (var i = 0; i < jsonObj.p.length; i++) {
+                        html += '<p>' + jsonObj.p[i] + '</p>';
+
+                    }
+                    return html;
+                }
+
+                return function (data) {
+                    container.html(parseChapterData(data));
+                }
             }
 
             function EventHandler() {
@@ -518,7 +596,21 @@
                 });
 
                 //点击背景 切换背景
-                Dom.bk_container.click(function () {
+                $('.bk-container').click(function () {
+                        body.css('backgroundColor', '#C7EDCC');
+                    $('.bk-container').addClass('.bk-container-current');
+
+                });
+                $('.bk-container-green').click(function () {
+                    body.css('backgroundColor', '#C7EDCC');
+                    $('.bk-container-green').addClass('.bk-container-current');
+
+
+                });
+                $('.bk-container-black').click(function () {
+                    body.css('backgroundColor', '##080c10');
+                    $('.bk-container-black').addClass('.bk-container-current');
+
 
                 });
 
@@ -529,6 +621,16 @@
                     $('.icon-font').removeClass('font-current');
 
                 });
+                $('#prev_button').click(function () {
+                    //获取章节的范晔数据->把数据拿出来渲染
+                    readerModel.prevChapter();
+                });
+                $('#next_button').click(function () {
+                    readerModer.nextChapter(function (data) {
+                        readerUI(data);
+
+                    });
+                })
             }
 
             main();
